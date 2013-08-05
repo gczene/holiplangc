@@ -2,6 +2,9 @@
 
 class SiteController extends Controller
 {
+	
+	
+	public $layout = '//layouts/layoutSite';
 	/**
 	 * Declares class-based actions.
 	 */
@@ -32,6 +35,28 @@ class SiteController extends Controller
 		$this->render('index');
 	}
 
+	
+	public function actionRegister()
+	{
+		
+		$user = new Users('register');
+		
+		$form = new CForm($user->registerConfig, $user );
+		if ($form->submitted('register') && $form->model->validate() ){
+			$user->save();
+			/* is the company registered ? */
+			if (!Companies::model()->findByAttributes(array('identifier' => $user->identifier))){
+				$company = new Companies();
+				$company->identifier = $user->identifier;
+				$company->registeredBy = $user->_id;
+				$company->save();
+			}
+			
+		}
+		else
+			$this->render('viewRegister', array('form' => $form));
+	}
+	
 	/**
 	 * This is the action to handle external exceptions.
 	 */

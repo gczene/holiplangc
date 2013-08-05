@@ -1,0 +1,51 @@
+/* 
+    Document   : holiday
+    Created on : 03-Aug-2013, 08:18:19
+    Author     : gczene
+    Description:
+        Purpose of the stylesheet follows.
+*/
+@import url(./fonts/font-ubuntu.css);
+root								{display: block;}
+a								{text-decoration: none;}
+*								{margin:0px; padding: 0px; font-family: ubuntulight; font-size: 14px; color: #404041;}
+i								{font-family: ubuntulight_italic;}
+b,strong,h1,h2,h3,h4,h5				{font-family:ubuntubold;}
+b i, strong i, h1 i, h2 i, h3 i, h4 i, h5 i		{font-family: ubuntubold_italic;}
+.pt-12							{padding-top: 12px;}
+.pt-24							{padding-top: 24px;}
+.pb-12							{padding-bottom: 12px;}
+.pb-24							{padding-bottom: 24px;}
+.positionCenter					{position: relative; margin-left: auto; margin-right: auto;}
+
+
+#mainContainer					{width: 100%;}
+
+#header							{height: 118px; width: 1200px;  position: relative; margin: 0 auto;}
+#header #logo						{width: 220px; height: 48px;background-image: url(./images/logo.png);margin-left: 20px; margin-top: 35px ; float:left;}
+#header #logoDesc					{height: 48px; margin-top: 35px; color: 161616; font-size: 20px; padding-left: 50px; float: left;}
+
+#mainmenu						{border-top: 1px solid #ececec; border-bottom: 1px solid #ececec; height: 50px;}
+#mainmenu UL						{display: block; height: 42px;  position: relative; margin: 4px auto; width: 1200px; list-style-type:none;}
+#mainmenu UL LI					{display: block; float: left; margin-right: 15px; position: relative; }
+
+#mainmenu UL LI A					{display: block; text-align: center;min-width: 124px; padding: 0 10px; line-height: 42px; height: 42px; color: #dadada; font-family: ubuntubold; position: relative;}
+#mainmenu UL LI .menuBG			{background: #323233;width: 100%;  position: absolute; top: 0px; z-index: -1;  margin-left: 0px ; height: 0px; }
+#mainmenu UL LI.active  .menuBG		{height: 42px;}
+#mainmenu UL LI.active  A			{color: #fff;}
+#mainmenu UL LI A:hover				{ color: #fff;}
+#mainmenu UL LI:hover > .menuBG		{height: 42px ; transition: height .3s;-webkit-transition: height .3s;-ms-transition: height .3s; -o-transition: height .3s;-moz-transition: height .3s;}
+
+
+.registerForm					{width: 600px;}
+.form						{}
+.form .row					{padding: 12px 24px;}
+.form .row .text				{background-color: #eee; width: 100%; border: none; line-height: 36px; text-indent: 12px; display: block; }
+.form .row .text:focus			{background: #ead299;  border: none; box-shadow: 1px 1px 8px #666; font-weight: bold;}
+.form .row label				{display: block; padding-bottom: 12px;}
+.form fieldset					{ border: none;}
+.form fieldset legend			{ font-family: ubuntubold; font-size: 18px; padding: 12px;}
+.form .errorMessage			{background: #bd4848; color: #fff; padding: 10px 24px; -moz-border-radius: 0 20px; -webkit-border-radius: 20px 0; -khtml-border-radius: 0 20px; border-radius: 0 0 20px 20px;box-shadow: 1px 1px 3px #ccc;text-shadow: 1px 1px #666;}
+.form .submit					{height: 36px; line-height: 36px; padding: 0px 24px; border: none;}
+.form .submit:hover					{background: #323233; color: #fff; cursor: pointer; }
+
