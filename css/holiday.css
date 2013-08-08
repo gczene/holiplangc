@@ -40,7 +40,7 @@ b i, strong i, h1 i, h2 i, h3 i, h4 i, h5 i		{font-family: ubuntubold_italic;}
 .registerForm					{width: 600px;}
 .form						{}
 .form .row					{padding: 12px 24px;}
-.form .row .text				{background-color: #eee; width: 100%; border: none; line-height: 36px; text-indent: 12px; display: block; }
+.form .row .text				{background-color: #eee; width: 100%; border: none; line-height: 36px;height: 36px; text-indent: 12px; display: block; }
 .form .row .text:focus			{background: #ead299;  border: none; box-shadow: 1px 1px 8px #666; font-weight: bold;}
 .form .row label				{display: block; padding-bottom: 12px;}
 .form fieldset					{ border: none;}

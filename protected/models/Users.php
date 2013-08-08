@@ -9,6 +9,14 @@ class Users extends CMongo
 	public $password2;
 	public $registered;
 	public  $salt;
+	public $last_activity;
+	public $status;
+	public $access_level;
+	static $accessLevels = array(
+		'accountant',
+		'manager',
+		'superUser',
+	);
 
 	
 	public static function model($className=__CLASS__)
@@ -16,19 +24,30 @@ class Users extends CMongo
 			  return parent::model($className);
 	}	
 
+	/*
+	 * a user attributes
+	 * @return array
+	 */
 	public function attributeLabels() {
 		return array(
-			'first_name' => 'First Name',
-			'last_name'	=> 'Last Name',
-			'email'	=> 'E-mail',
-			'password'	=> 'Password',
+			'first_name'	=> 'First Name',
+			'last_name'		=> 'Last Name',
+			'email'		=> 'E-mail',
+			'password'		=> 'Password',
 			'password2'	=> 'Password again',
-			'identifier'	=> 'Identifier',
-			'registered' => 'Registered',
-			'salt'		=> 'Salt',
+			'identifier'		=> 'Identifier',
+			'registered'		=> 'Registered',
+			'salt'			=> 'Salt',
+			'last_activity'	=> 'Last activity',
+			'status'		=> 'Status',
+			'access_level'	=> 'Access Level',
 		);
 	}
 	
+	/*
+	 * validation rules 
+	 * @return array
+	 */
 	public function rules()
 	{
 		return array(
@@ -37,13 +56,17 @@ class Users extends CMongo
 			array('password, password2', 'required', 'on' => 'register'),
 			array('password', 'compare', 'compareAttribute' => 'password2' , 'on' => 'register'),
 			array('email', 'isRegistered', 'on' => 'register'),
+			array('last_activity, registered, status', 'numerical',  'integerOnly' => true),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('_id,first_name, last_name, company, email, password, registered', 'safe', 'on'=>'search'),
+			array('_id,first_name, last_name, company, email, password, registered, access_level', 'safe', 'on'=>'search'),
 		);
 	}
 	
-	
+	/*
+	 * unique checking for "register" scenario
+	 * @return bool
+	 */
 	public function isRegistered()
 	{
 		$this->setCollection( Companies::emailToIdentifier($this->email) . '.users' );
@@ -52,12 +75,15 @@ class Users extends CMongo
 			return false;
 		}
 		else{
-			$this->registered = time();
+			$this->last_activity = $this->registered = time();
 			return true;
 		}
 	}
 	
-	
+	/*
+	 * registration form config
+	 * @return array
+	 */
 	public function getRegisterConfig()
 	{
 		$fields = array(
@@ -104,18 +130,24 @@ class Users extends CMongo
 		
 	}
 
-	
+	/*
+	 * method before saving an object. It can be grouped by scenarios
+	 */
 	public function beforeSave(){
 		if ($this->getScenario() == 'register'){
 			$this->identifier = Companies::emailToIdentifier($this->email);
 			$this->salt = self::blowfishSalt();
 			$this->password = crypt($this->password, $this->salt);
 			$this->password2 = null;
+			$this->status = 1;
 		}
 		$this->setCollection($this->identifier. '.users' );
 		return true;
 	}
 	
+	/*
+	 * method after saving process
+	 */
 	public function afterSave() {
 		parent::afterSave();
 			$this->db->{$this->collection}->ensureIndex(array("email" => 1), array("unique" => 1, "dropDups" => 1));

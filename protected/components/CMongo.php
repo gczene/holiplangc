@@ -71,8 +71,14 @@ class CMongo extends CModel
 		if ($this->beforeSave())
 		{
 			$contents = $this->attributes;
-			$this->db->{$this->collection}->insert($contents);
-			$this->_id = $contents['_id'];
+			if ($this->_new){
+				$this->db->{$this->collection}->insert($contents);
+				$this->_id = $contents['_id'];
+				$this->_new = false;
+			}
+			else{
+				$this->db->{$this->collection}->update(array('_id' => $this->_id),  $contents);
+			}
 			unset($contents);
 			$this->afterSave();
 			return true;
@@ -123,6 +129,7 @@ class CMongo extends CModel
 						$this->data[$key] = $value;
 					}
 				}
+				$this->_new = false;
 				return $this;
 			}
 		}
@@ -139,6 +146,7 @@ class CMongo extends CModel
 					$this->data[$key] = $value;
 				}
 			}
+			$this->_new = false;			
 			return $this;
 		}
 		else{

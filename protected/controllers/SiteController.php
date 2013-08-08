@@ -41,20 +41,45 @@ class SiteController extends Controller
 		
 		$user = new Users('register');
 		
+		echo gettype(Yii::app()->session->get('accessLevel'));
 		$form = new CForm($user->registerConfig, $user );
 		if ($form->submitted('register') && $form->model->validate() ){
+			// posted and validated
+			$password = $user->password; // after saving the $user->password is hashed.
 			$user->save();
-			/* is the company registered ? */
-			if (!Companies::model()->findByAttributes(array('identifier' => $user->identifier))){
-				$company = new Companies();
-				$company->identifier = $user->identifier;
-				$company->registeredBy = $user->_id;
-				$company->save();
+			/* log in the user */
+			$userIdentity = new UserIdentity($user->email, $password);
+			if ($userIdentity->authenticate()){
+				Yii::app()->user->login($userIdentity);				
+			
+				/* is the company registered ? */
+				if (!Companies::model()->findByAttributes(array('identifier' => $user->identifier))){
+					$company = new Companies();
+					$company->identifier = $user->identifier;
+					$company->registeredBy = $user->_id;
+					$company->save();
+					
+					// it is the first user, let's give all access 
+					$user->access_level = Users::$accessLevels;
+					$user->save();
+					$this->redirect( Yii::app()->baseUrl . '/companyDetails' );
+				}
+				else{
+					//company is registered
+					$this->redirect(Yii::app()->baseUrl .  '/dashboard');
+				}
 			}
 			
 		}
 		else
 			$this->render('viewRegister', array('form' => $form));
+	}
+	
+	
+	public function actionCompanyDetails()
+	{
+		echo Yii::app()->user->getState('identifier');
+		$this->render('viewCompanyDetails');
 	}
 	
 	/**
