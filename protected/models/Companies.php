@@ -4,10 +4,12 @@ class Companies extends CMongo
 {
 	protected $_collection = 'companies';
 	
-	public $company;
+	public $name;
 	public $identifier;
 	public $registeredBy;
 	public $registered;
+	public $url;
+	public $subdomain;
 	
 	
 	public static function model($className=__CLASS__)
@@ -17,10 +19,12 @@ class Companies extends CMongo
 	 
 	public function attributeLabels() {
 		return array(
-			'company'	=> 'Company',
+			'name'	=> 'Company Name',
 			'identifier'	=> 'Identifier', // collection name
 			'registeredBy' => 'Registered By',
 			'registered' => 'Registered at',
+			'url' => 'Website',
+			'subdomain' => 'Subdomain',
 		);
 	}
 	
@@ -28,13 +32,29 @@ class Companies extends CMongo
 	public function rules()
 	{
 		return array(
-			array('registered', 'required'),
+			array('name, url, subdomain', 'required'),
+			array('name, subdomain', 'length', 'min' => 3),
+			array('url', 'url'),
+			array('subdomain', 'isUniqueSubdomain', 'on' => 'register'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('company, registeredBy, registered', 'safe',  'on'=>'search'),
+			array('name, registeredBy, registered', 'safe',  'on'=>'search'),
 		);
 	}
 	
+	public function isUniqueSubdomain($attr){
+		if ($this->isNewRecord){
+			$subdomain = self::model()->findByAttributes(array('subdomain' => $this->{$attr}));
+			if ($subdomain){
+				$this->addError('subdomain', 'This subdomain is already in use!');
+				return false;
+			}
+			else{
+				return true;
+			}
+		}
+		return true;
+	}
 	
 	public static function emailToIdentifier($email){
 		return preg_replace('/^.+@/', '', $email);
@@ -67,7 +87,7 @@ class Companies extends CMongo
 					'maxlength'=>32,
 					'class' => 'text required',
 				),
-				'company'=>array(
+				'name'=>array(
 					'type'=>'text',
 					'maxlength'=>32,
 					'class' => 'text required',

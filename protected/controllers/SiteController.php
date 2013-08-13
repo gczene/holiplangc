@@ -36,43 +36,68 @@ class SiteController extends Controller
 	}
 
 	
+	public function beforeAction(){
+		Yii::app()->theme = 'holiday';
+		
+		Yii::app()->clientScript->registerCoreScript('jquery');
+		return true;
+		
+		
+	}
 	public function actionRegister()
 	{
 		
+		Yii::app()->clientScript->registerScriptFile( Yii::app()->theme->baseUrl . '/assets/js/registration.js' );
+
 		$user = new Users('register');
+		$company = new Companies('register');
 		
-		echo gettype(Yii::app()->session->get('accessLevel'));
-		$form = new CForm($user->registerConfig, $user );
-		if ($form->submitted('register') && $form->model->validate() ){
+		
+		if (isset($_POST['Users']) && isset($_POST['Companies'])){
+			$company ->attributes	= $_POST['Companies'];
+			$user->attributes		= $_POST['Users'];
+			$validUser				= $user->validate();
+			$validCompany			= $company->validate();
+			if ( $validCompany && $validUser ){
+				
+			}
+		}
+		
+		
+		if (1 != 1 ){
 			// posted and validated
-			$password = $user->password; // after saving the $user->password is hashed.
-			$user->save();
+//			$password = $user->password; // after saving the $user->password is hashed.
+//			$user->save();
 			/* log in the user */
-			$userIdentity = new UserIdentity($user->email, $password);
-			if ($userIdentity->authenticate()){
-				Yii::app()->user->login($userIdentity);				
+//			$userIdentity = new UserIdentity($user->email, $password);
+//			if ($userIdentity->authenticate()){
+//				Yii::app()->user->login($userIdentity);				
 			
 				/* is the company registered ? */
-				if (!Companies::model()->findByAttributes(array('identifier' => $user->identifier))){
-					$company = new Companies();
-					$company->identifier = $user->identifier;
-					$company->registeredBy = $user->_id;
-					$company->save();
-					
-					// it is the first user, let's give all access 
-					$user->access_level = Users::$accessLevels;
-					$user->save();
-					$this->redirect( Yii::app()->baseUrl . '/companyDetails' );
-				}
-				else{
-					//company is registered
-					$this->redirect(Yii::app()->baseUrl .  '/dashboard');
-				}
-			}
+//				if (!Companies::model()->findByAttributes(array('identifier' => $user->identifier))){
+//					$company = new Companies();
+//					$company->identifier = $user->identifier;
+//					$company->registeredBy = $user->_id;
+//					$company->save();
+//					
+//					// it is the first user, let's give all access 
+//					$user->access_level = Users::$accessLevels;
+//					$user->save();
+//					$this->redirect( Yii::app()->baseUrl . '/companyDetails' );
+//				}
+//				else{
+//					//company is registered
+//					$this->redirect(Yii::app()->baseUrl .  '/dashboard');
+//				}
+//			}
 			
 		}
 		else
-			$this->render('viewRegister', array('form' => $form));
+			$this->render('viewRegister', array(
+				'company' => $company,
+				'user'	=> $user,
+				
+			));
 	}
 	
 	

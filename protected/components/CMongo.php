@@ -175,6 +175,9 @@ class CMongo extends CModel
 	}
 	
 
+	public function getIsNewRecord(){
+		return $this->_new;
+	}
 	
 
 }
