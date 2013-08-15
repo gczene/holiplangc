@@ -52,14 +52,29 @@ class SiteController extends Controller
 		$user = new Users('register');
 		$company = new Companies('register');
 		
-		
 		if (isset($_POST['Users']) && isset($_POST['Companies'])){
-			$company ->attributes	= $_POST['Companies'];
+			$company->attributes	= $_POST['Companies'];
 			$user->attributes		= $_POST['Users'];
 			$validUser				= $user->validate();
 			$validCompany			= $company->validate();
 			if ( $validCompany && $validUser ){
-				
+				$company->save();
+                $password = $user->password;
+                $user->identifier = $company->_id;
+                $user->access_level = Users::$accessLevels;
+                $user->save();
+                $company->registeredBy = $user->_id;
+                $company->save();
+                /* log in the user */
+    			$userIdentity = new UserIdentity($user->email, $password, $company->_id);
+    			if ($userIdentity->authenticate()){
+    				Yii::app()->user->login($userIdentity);
+                    echo 'be van loggolva';
+                }
+                else{
+                    echo 'nincs;';
+                }
+                
 			}
 		}
 		

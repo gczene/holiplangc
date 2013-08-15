@@ -10,22 +10,36 @@ class UserIdentity extends CUserIdentity
 	
 	private $_id;
 	public $email;
+    public $companyId;
 	
-	public function __construct($email,$password)
+	public function __construct($email,$password, $companyId)
 	{
-		$this->email=$email;
-		$this->password=$password;
+		$this->email        = $email;
+		$this->password     = $password;
+        $this->companyId    = $companyId;
 	}	
 	
 	public function authenticate()
 	{
-		$user = Users::model()->findByAttributes(array('email' => $this->email));
-
-		if (! $user)
+        $userObj = new Users;
+        $userObj->setCollection($this->companyId . '.users');
+        echo $userObj->getCollection();
+        echo '<br /' . $this->email;
+		$user = $userObj->findByAttributes(array('email' => $this->email));
+        
+        echo gettype($user);
+        echo $user->getCollection();
+        die();
+		if (! $user){
 			$this->errorCode=self::ERROR_USERNAME_INVALID;
-		elseif ($user->password != crypt($this->password, $user->salt))
+            echo 'nincs ilyen user';
+        }
+		elseif ($user->password != crypt($this->password, $user->salt)){
 			$this->errorCode=self::ERROR_PASSWORD_INVALID;
+            echo 'password name passol';
+        }
 		else{
+            echo 'nincs ilyen egyaltalan';
 			$this->errorCode=self::ERROR_NONE;
 			$this->_id = $user->_id;
 			$this->setState('firstName', $user->first_name);

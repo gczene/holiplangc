@@ -44,12 +44,12 @@
 		</div>
 		<div class="row">
 			<?php echo CHtml::activeLabel($user, 'password') ?>
-			<?php echo CHtml::activeTextField($user, 'password', array('class' => 'text')) ?>
+			<?php echo CHtml::activePasswordField($user, 'password', array('class' => 'text')) ?>
 			<?php echo CHtml::error($user, 'password') ?>
 		</div>
 		<div class="row">
 			<?php echo CHtml::activeLabel($user, 'password2') ?>
-			<?php echo CHtml::activeTextField($user, 'password2', array('class' => 'text')) ?>
+			<?php echo CHtml::activePasswordField($user, 'password2', array('class' => 'text')) ?>
 			<?php echo CHtml::error($user, 'password2') ?>
 		</div>
 	</fieldset>

@@ -135,7 +135,6 @@ class Users extends CMongo
 	 */
 	public function beforeSave(){
 		if ($this->getScenario() == 'register'){
-			$this->identifier = Companies::emailToIdentifier($this->email);
 			$this->salt = self::blowfishSalt();
 			$this->password = crypt($this->password, $this->salt);
 			$this->password2 = null;
