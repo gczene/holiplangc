@@ -10,6 +10,9 @@ class Companies extends CMongo
 	public $registered;
 	public $url;
 	public $subdomain;
+	public $maxUsers;
+	
+	static $minUsers = 20;
 	
 	
 	public static function model($className=__CLASS__)
@@ -25,6 +28,7 @@ class Companies extends CMongo
 			'registered' => 'Registered at',
 			'url' => 'Website',
 			'subdomain' => 'Subdomain',
+			'maxUsers' => 'Max Users',
 		);
 	}
 	
@@ -35,6 +39,7 @@ class Companies extends CMongo
 			array('name, url, subdomain', 'required'),
 			array('name, subdomain', 'length', 'min' => 3),
 			array('url', 'url'),
+			array('maxUsers', 'numerical', 'integerOnly' => true),
 			array('subdomain', 'isUniqueSubdomain', 'on' => 'register'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
@@ -63,6 +68,10 @@ class Companies extends CMongo
 	public function beforeSave() {
 		if (! $this->registered){
 			$this->registered = time();
+		}
+		
+		if ($this->isNewRecord){
+			$this->maxUsers = self::$minUsers;
 		}
 		
 		parent::beforeSave();

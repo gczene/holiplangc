@@ -5,6 +5,8 @@ class SiteController extends Controller
 	
 	
 	public $layout = '//layouts/layoutSite';
+	public $company;
+	
 	/**
 	 * Declares class-based actions.
 	 */
@@ -65,47 +67,10 @@ class SiteController extends Controller
                 $user->save();
                 $company->registeredBy = $user->_id;
                 $company->save();
+				$this->redirect( '/successfullRegistration' . ( YII_DEBUG ? '?url=' . urlencode($this->_getValidationLink($user->_id, $company->_id, $company->subdomain))  : '' ));
                 /* log in the user */
-    			$userIdentity = new UserIdentity($user->email, $password, $company->_id);
-    			if ($userIdentity->authenticate()){
-    				Yii::app()->user->login($userIdentity);
-                    echo 'be van loggolva';
-                }
-                else{
-                    echo 'nincs;';
-                }
                 
 			}
-		}
-		
-		
-		if (1 != 1 ){
-			// posted and validated
-//			$password = $user->password; // after saving the $user->password is hashed.
-//			$user->save();
-			/* log in the user */
-//			$userIdentity = new UserIdentity($user->email, $password);
-//			if ($userIdentity->authenticate()){
-//				Yii::app()->user->login($userIdentity);				
-			
-				/* is the company registered ? */
-//				if (!Companies::model()->findByAttributes(array('identifier' => $user->identifier))){
-//					$company = new Companies();
-//					$company->identifier = $user->identifier;
-//					$company->registeredBy = $user->_id;
-//					$company->save();
-//					
-//					// it is the first user, let's give all access 
-//					$user->access_level = Users::$accessLevels;
-//					$user->save();
-//					$this->redirect( Yii::app()->baseUrl . '/companyDetails' );
-//				}
-//				else{
-//					//company is registered
-//					$this->redirect(Yii::app()->baseUrl .  '/dashboard');
-//				}
-//			}
-			
 		}
 		else
 			$this->render('viewRegister', array(
@@ -115,6 +80,20 @@ class SiteController extends Controller
 			));
 	}
 	
+	
+	private function _getValidationLink($userId, $companyId, $subdomain)
+	{
+		return 'http://' . $subdomain . '.' . Yii::app()->params['domain'] . '/userValidation/' . $userId . '/' . $companyId;
+	}
+	
+	
+	public function actionSuccessfullRegistration()
+	{
+		if (YII_DEBUG)
+			echo urldecode ($_GET['url']);
+		
+		$this->render('viewSuccessfullRegistraion');
+	}
 	
 	public function actionCompanyDetails()
 	{
@@ -196,4 +175,15 @@ class SiteController extends Controller
 		Yii::app()->user->logout();
 		$this->redirect(Yii::app()->homeUrl);
 	}
+	
+	
+	public function filters(){
+		return array(
+			array(
+			 'application.filters.SubdomainFilter',
+			 )
+			
+		);
+	}
+	
 }

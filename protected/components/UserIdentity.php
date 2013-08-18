@@ -23,23 +23,15 @@ class UserIdentity extends CUserIdentity
 	{
         $userObj = new Users;
         $userObj->setCollection($this->companyId . '.users');
-        echo $userObj->getCollection();
-        echo '<br /' . $this->email;
 		$user = $userObj->findByAttributes(array('email' => $this->email));
-        
-        echo gettype($user);
-        echo $user->getCollection();
-        die();
+
 		if (! $user){
 			$this->errorCode=self::ERROR_USERNAME_INVALID;
-            echo 'nincs ilyen user';
         }
 		elseif ($user->password != crypt($this->password, $user->salt)){
 			$this->errorCode=self::ERROR_PASSWORD_INVALID;
-            echo 'password name passol';
         }
 		else{
-            echo 'nincs ilyen egyaltalan';
 			$this->errorCode=self::ERROR_NONE;
 			$this->_id = $user->_id;
 			$this->setState('firstName', $user->first_name);

@@ -138,7 +138,7 @@ class Users extends CMongo
 			$this->salt = self::blowfishSalt();
 			$this->password = crypt($this->password, $this->salt);
 			$this->password2 = null;
-			$this->status = 1;
+			$this->status = 0;
 		}
 		$this->setCollection($this->identifier. '.users' );
 		return true;

@@ -50,6 +50,7 @@ return array(
 //				'<controller:\w+>/<id:\d+>'=>'<controller>/view',
 //				'<controller:\w+>/<action:\w+>/<id:\d+>'=>'<controller>/<action>',
 //				'<controller:\w+>/<action:\w+>'=>'<controller>/<action>',
+				'<action:\w+>/<userId:[\d\w]+>/<companyId:[\d\w]+>' => 'site/<action>',
 				'<action:\w+>' => 'site/<action>',
 			),
 		),
@@ -93,5 +94,6 @@ return array(
 	'params'=>array(
 		// this is used in contact page
 		'adminEmail'=>'webmaster@example.com',
+		'domain'	=> '',
 	),
 );

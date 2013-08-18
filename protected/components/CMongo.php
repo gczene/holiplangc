@@ -137,7 +137,7 @@ class CMongo extends CModel
 	}
 	
 	public function findByPk($pk){
-		if ($result = $this->db->{$this->collection}->findOne( array('_id' =>   $pk  ))){
+		if ($result = $this->db->{$this->collection}->findOne( array('_id' => new MongoId($pk)  ))){
 			foreach($result as $key => $value){
 				if (property_exists($this, $key)){
 					$this->{$key} = $value;
