@@ -7,33 +7,37 @@
  */
 class UserIdentity extends CUserIdentity
 {
-	
+	const ERROR_USER_NOT_ACTIVATED = 200;
 	private $_id;
 	public $email;
-    public $companyId;
+	public $companyId;
 	
 	public function __construct($email,$password, $companyId)
 	{
 		$this->email        = $email;
 		$this->password     = $password;
-        $this->companyId    = $companyId;
+		$this->companyId    = $companyId;
 	}	
 	
 	public function authenticate()
 	{
-        $userObj = new Users;
-        $userObj->setCollection($this->companyId . '.users');
+		$userObj = new Users;
+		$userObj->setCollection($this->companyId . '.users');
 		$user = $userObj->findByAttributes(array('email' => $this->email));
 
 		if (! $user){
 			$this->errorCode=self::ERROR_USERNAME_INVALID;
-        }
+		}
+		elseif  ( ! $user->status ){
+			$this->errorCode = self::ERROR_USER_NOT_ACTIVATED;
+		}
 		elseif ($user->password != crypt($this->password, $user->salt)){
 			$this->errorCode=self::ERROR_PASSWORD_INVALID;
-        }
+		}
 		else{
 			$this->errorCode=self::ERROR_NONE;
 			$this->_id = $user->_id;
+			$this->username = $user->first_name;
 			$this->setState('firstName', $user->first_name);
 			$this->setState('lastName', $user->last_name);
 			$this->setState('identifier', $user->identifier);

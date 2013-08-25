@@ -1,10 +1,5 @@
-
-
-
 	<div class="registerForm positionCenter">
 		<?php echo CHtml::beginForm('', 'post', array('class' => 'form')); ?>
-		
-		<?php $this->renderPartial('partials/companyRegistrationForm', array('company' => $company)); ?>
 		
 		<?php $this->renderPartial('partials/userRegistrationForm', array('user' => $user)); ?>
 		

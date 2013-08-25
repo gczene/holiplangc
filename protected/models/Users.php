@@ -53,6 +53,7 @@ class Users extends CMongo
 		return array(
 			array('first_name, last_name, email', 'required'),
 			array('email', 'email'),
+			array('password', 'length', 'min' => 5, 'on' => 'register'),
 			array('password, password2', 'required', 'on' => 'register'),
 			array('password', 'compare', 'compareAttribute' => 'password2' , 'on' => 'register'),
 			array('email', 'isRegistered', 'on' => 'register'),
@@ -69,15 +70,21 @@ class Users extends CMongo
 	 */
 	public function isRegistered()
 	{
-		$this->setCollection( Companies::emailToIdentifier($this->email) . '.users' );
-		if (Users::model()->setCollection($this->getCollection())->findByAttributes(array('email' => $this->email))){
-			$this->addError('email', 'You are already registered!');
-			return false;
+		/* company's page and the user identifier's property is filled */
+		if (COMPANY && $this->identifier){
+				$this->setCollection( $this->identifier  . '.users' );
+				if (Users::model()->setCollection($this->getCollection())->findByAttributes(array('email' => $this->email))){
+					$this->addError('email', 'You are already registered!');
+					return false;
+				}
+				else{
+					$this->last_activity = $this->registered = time();
+					return true;
+				}
 		}
-		else{
-			$this->last_activity = $this->registered = time();
+		/* company registration  */
+		else
 			return true;
-		}
 	}
 	
 	/*

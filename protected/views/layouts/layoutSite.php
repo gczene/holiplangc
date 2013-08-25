@@ -19,17 +19,7 @@
 		
 		<div id="mainmenu">
 			<?php 
-			$this->widget('zii.widgets.CMenu',array(
-				'itemTemplate'=>'{menu}<div class="menuBG"></div>',
-				'items'=>array(
-					array('label'=>'Home', 'url'=>array('/site/index')),
-					array('label'=>'About', 'url'=>array('/site/page', 'view'=>'about')),
-					array('label'=>'Contact', 'url'=>array('/site/contact')),
-					array('label'=>'Login', 'url'=>array('/site/login'), 'visible'=>Yii::app()->user->isGuest),
-					array('label'=>'Register', 'url'=>array('/site/register'), 'visible'=>Yii::app()->user->isGuest),
-					array('label'=>'Logout ('.Yii::app()->user->name.')', 'url'=>array('/site/logout'), 'visible'=>!Yii::app()->user->isGuest)
-				),
-			));
+			$this->widget('zii.widgets.CMenu',$this->menu);
 			?>
 <!--						<ul id="yw0">
 						<li class="active"><a href="/index.php/site/index">Home
@@ -50,7 +40,9 @@
 		</div><!-- mainmenu -->
 		
 		<div class="pt-24 pb-24">
-			<?php echo $content; ?>
+			<div class="positionCenter container">
+				<?php echo $content; ?>
+			</div>
 		</div>
 	</div>
 </body>

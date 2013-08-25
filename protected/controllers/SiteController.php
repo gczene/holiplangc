@@ -6,6 +6,7 @@ class SiteController extends Controller
 	
 	public $layout = '//layouts/layoutSite';
 	public $company;
+	public $menu;
 	
 	/**
 	 * Declares class-based actions.
@@ -51,6 +52,41 @@ class SiteController extends Controller
 		
 		Yii::app()->clientScript->registerScriptFile( Yii::app()->theme->baseUrl . '/assets/js/registration.js' );
 
+		if ($this->company){
+			$this->_userRegistratoin();
+		}
+		else{
+			$this->_companyRegistration();
+		}
+	}
+	
+	private function _userRegistratoin()
+	{
+		$user = new Users('register');
+		if (isset($_POST['Users'])){
+			$user->attributes		= $_POST['Users'];
+			$user->identifier			= $this->company->_id;
+			if ( $user->validate() ){
+				$password = $user->password;
+				$user->identifier = $this->company->_id;
+				$user->access_level = array();
+				$user->save();
+				/*
+				 * mail to admins
+				 */
+				$this->redirect( '/successfullRegistration' . ( YII_DEBUG ? '?url=' . urlencode($this->_getValidationLink($user->_id, $this->company->_id, $this->company->subdomain))  : '' ));
+                
+			}
+		}
+		
+		$this->render('viewUserRegister', array(
+			'user'	=> $user,
+		));
+		
+	}
+	
+	private function _companyRegistration()
+	{
 		$user = new Users('register');
 		$company = new Companies('register');
 		
@@ -61,31 +97,60 @@ class SiteController extends Controller
 			$validCompany			= $company->validate();
 			if ( $validCompany && $validUser ){
 				$company->save();
-                $password = $user->password;
-                $user->identifier = $company->_id;
-                $user->access_level = Users::$accessLevels;
-                $user->save();
-                $company->registeredBy = $user->_id;
-                $company->save();
+				$password = $user->password;
+				$user->identifier = $company->_id;
+				$user->access_level = Users::$accessLevels;
+				$user->save();
+				$company->registeredBy = $user->_id;
+				$company->save();
 				$this->redirect( '/successfullRegistration' . ( YII_DEBUG ? '?url=' . urlencode($this->_getValidationLink($user->_id, $company->_id, $company->subdomain))  : '' ));
-                /* log in the user */
                 
 			}
 		}
-		else
+		
 			$this->render('viewRegister', array(
 				'company' => $company,
 				'user'	=> $user,
 				
 			));
+		
 	}
 	
-	
+	/*
+	 * validation link after registration
+	 * 
+	 */
 	private function _getValidationLink($userId, $companyId, $subdomain)
 	{
-		return 'http://' . $subdomain . '.' . Yii::app()->params['domain'] . '/userValidation/' . $userId . '/' . $companyId;
+		return 'http://' . $subdomain . '.' . Yii::app()->params['domain'] . '/userValidation/' . Yii::app()->encrypt->encode( $userId ) . '/' . Yii::app()->encrypt->encode($companyId);
 	}
 	
+	
+	public function actionUserValidation(){
+		
+		if (isset($_GET['userId']) && isset($_GET['companyId']))
+		{
+			$userId = Yii::app()->encrypt->decode($_GET['userId']);
+			$companyId = Yii::app()->encrypt->decode($_GET['companyId']);
+			$company = Companies::model()->findByPk($companyId);
+			$user = Users::model()->setCollection( $companyId . '.users' )->findByPk($userId);
+			if ($company && (COMPANY == $company->subdomain) && $user ){
+				
+				if ($user->status == 0){
+					$user->status = 1;
+					$user->save();
+				}
+				
+				$this->actionLogin(true);
+
+			}
+			else{
+				throw new CHttpException(404, 'Something went wrong!');
+			}
+			
+		}
+		
+	}
 	
 	public function actionSuccessfullRegistration()
 	{
@@ -144,14 +209,14 @@ class SiteController extends Controller
 	/**
 	 * Displays the login page
 	 */
-	public function actionLogin()
+	public function actionLogin($validated = false)
 	{
 		$model=new LoginForm;
 
 		// if it is ajax validation request
 		if(isset($_POST['ajax']) && $_POST['ajax']==='login-form')
 		{
-			echo CActiveForm::validate($model);
+//			echo CActiveForm::validate($model);
 			Yii::app()->end();
 		}
 
@@ -159,12 +224,14 @@ class SiteController extends Controller
 		if(isset($_POST['LoginForm']))
 		{
 			$model->attributes=$_POST['LoginForm'];
+			$model->companyId = $this->company->_id;
 			// validate user input and redirect to the previous page if valid
 			if($model->validate() && $model->login())
-				$this->redirect(Yii::app()->user->returnUrl);
+				$this->redirect( '/dashboard' );
 		}
+		
 		// display the login form
-		$this->render('login',array('model'=>$model));
+		$this->render('login',array('model'=>$model, 'validated' => $validated));
 	}
 
 	/**

@@ -1,8 +1,8 @@
 <?php
-/* @var $this MongoController */
+/* @var $this DashboardController */
 
 $this->breadcrumbs=array(
-	'Mongo',
+	'Dashboard',
 );
 ?>
 <h1><?php echo $this->id . '/' . $this->action->id; ?></h1>

@@ -42,7 +42,9 @@ return array(
 			'allowAutoLogin'=>true,
 		),
 		// uncomment the following to enable URLs in path-format
-		
+		'encrypt' => array(
+			'class' => 'application.components.Encrypt',
+		),
 		'urlManager'=>array(
 			'urlFormat'=>'path',
 			'showScriptName'=>false,			
@@ -50,8 +52,13 @@ return array(
 //				'<controller:\w+>/<id:\d+>'=>'<controller>/view',
 //				'<controller:\w+>/<action:\w+>/<id:\d+>'=>'<controller>/<action>',
 //				'<controller:\w+>/<action:\w+>'=>'<controller>/<action>',
-				'<action:\w+>/<userId:[\d\w]+>/<companyId:[\d\w]+>' => 'site/<action>',
+				'<controller:dashboard>'=>'<controller>/index',
+				'<controller:dashboard>/<id:\d+>'=>'<controller>/view',
+				'<controller:dashboard>/<action:\w+>/<id:\d+>'=>'<controller>/<action>',
+				'<controller:dashboard>/<action:\w+>'=>'<controller>/<action>',
 				'<action:\w+>' => 'site/<action>',
+//				'<action:\w+>/<userId:[\d\w]+>/<companyId:[\d\w]+>' => 'site/<action>',
+				'<action:userValidation>/<userId:[\d\w\.\-~]+>/<companyId:[\d\w\.\-~]+>' => 'site/<action>',
 			),
 		),
 		
@@ -95,5 +102,6 @@ return array(
 		// this is used in contact page
 		'adminEmail'=>'webmaster@example.com',
 		'domain'	=> '',
+		'encryption_key' => '4árvíztűrőtükö0rfúrógép',
 	),
 );

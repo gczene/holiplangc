@@ -7,22 +7,24 @@
  */
 class LoginForm extends CFormModel
 {
-	public $username;
+	public $email;
 	public $password;
 	public $rememberMe;
+	public $companyId;
 
 	private $_identity;
 
 	/**
 	 * Declares the validation rules.
-	 * The rules state that username and password are required,
+	 * The rules state that email and password are required,
 	 * and password needs to be authenticated.
 	 */
 	public function rules()
 	{
 		return array(
-			// username and password are required
-			array('username, password', 'required'),
+			// email and password are required
+			array('email, password', 'required'),
+			array('email', 'email'),
 			// rememberMe needs to be a boolean
 			array('rememberMe', 'boolean'),
 			// password needs to be authenticated
@@ -36,7 +38,7 @@ class LoginForm extends CFormModel
 	public function attributeLabels()
 	{
 		return array(
-			'rememberMe'=>'Remember me next time',
+			'rememberMe'=> '', // 'Remember me next time',
 		);
 	}
 
@@ -48,21 +50,24 @@ class LoginForm extends CFormModel
 	{
 		if(!$this->hasErrors())
 		{
-			$this->_identity=new UserIdentity($this->username,$this->password);
-			if(!$this->_identity->authenticate())
-				$this->addError('password','Incorrect username or password.');
+			$this->_identity=new UserIdentity($this->email,$this->password, $this->companyId);
+			if(!$this->_identity->authenticate() && $this->_identity->errorCode == UserIdentity::ERROR_USER_NOT_ACTIVATED  ){
+				$this->addError('email','This user is not activated yet!.');
+			}
+			elseif(!$this->_identity->authenticate())
+				$this->addError('password','Incorrect email or password.');
 		}
 	}
 
 	/**
-	 * Logs in the user using the given username and password in the model.
+	 * Logs in the user using the given email and password in the model.
 	 * @return boolean whether login is successful
 	 */
 	public function login()
 	{
 		if($this->_identity===null)
 		{
-			$this->_identity=new UserIdentity($this->username,$this->password);
+			$this->_identity=new UserIdentity($this->email,$this->password);
 			$this->_identity->authenticate();
 		}
 		if($this->_identity->errorCode===UserIdentity::ERROR_NONE)
