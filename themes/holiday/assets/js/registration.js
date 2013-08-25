@@ -1,5 +1,13 @@
 
 $(document).ready(function(){
+	
+$.widget("ui.tooltip", $.ui.tooltip, {
+    options: {
+        content: function () {
+            return $(this).prop('title');
+        }
+    }
+});	
 	$('#Companies_url').blur(function(){
 		var url =$(this).val();
 		
@@ -14,5 +22,7 @@ $(document).ready(function(){
 		$('#Companies_subdomain').val(sd(url));
 		
 	})
+	
+	$('.tooltip').tooltip();
 	
 })

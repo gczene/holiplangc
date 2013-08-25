@@ -72,6 +72,11 @@ class Users extends CMongo
 	{
 		/* company's page and the user identifier's property is filled */
 		if (COMPANY && $this->identifier){
+				$company = Companies::model()->findByPk($this->identifier);
+				if (!in_array( preg_replace('/.+@/', '', $this->email ), $company->allowedDomains )){
+					$this->addError('email', 'You can not register with this email address!');
+					return false;
+				}
 				$this->setCollection( $this->identifier  . '.users' );
 				if (Users::model()->setCollection($this->getCollection())->findByAttributes(array('email' => $this->email))){
 					$this->addError('email', 'You are already registered!');

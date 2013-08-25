@@ -7,7 +7,7 @@
 // CWebApplication properties can be configured here.
 return array(
 	'basePath'=>dirname(__FILE__).DIRECTORY_SEPARATOR.'..',
-	'name'=>'My Web Application',
+	'name'=>'Holiday Planner',
 
 	// preloading 'log' component
 	'preload'=>array('log'),
@@ -16,6 +16,7 @@ return array(
 	'import'=>array(
 		'application.models.*',
 		'application.components.*',
+		'application.extensions.yiimailer.YiiMailer',		
 	),
 
 	'modules'=>array(
@@ -100,7 +101,7 @@ return array(
 	// using Yii::app()->params['paramName']
 	'params'=>array(
 		// this is used in contact page
-		'adminEmail'=>'webmaster@example.com',
+		'adminEmail'=>'czene.gabor@gmail.com',
 		'domain'	=> '',
 		'encryption_key' => '4árvíztűrőtükö0rfúrógép',
 	),

@@ -11,6 +11,7 @@ class Companies extends CMongo
 	public $url;
 	public $subdomain;
 	public $maxUsers;
+	public $allowedDomains;
 	
 	static $minUsers = 20;
 	
@@ -29,6 +30,7 @@ class Companies extends CMongo
 			'url' => 'Website',
 			'subdomain' => 'Subdomain',
 			'maxUsers' => 'Max Users',
+			'allowedDomains' => 'Allowed domains',
 		);
 	}
 	
@@ -41,10 +43,35 @@ class Companies extends CMongo
 			array('url', 'url'),
 			array('maxUsers', 'numerical', 'integerOnly' => true),
 			array('subdomain', 'isUniqueSubdomain', 'on' => 'register'),
+			array('allowedDomains', 'arrangeDomains', 'on' => 'register'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('name, registeredBy, registered', 'safe',  'on'=>'search'),
+			array('name, registeredBy, registered, allowedDomains', 'safe',  'on'=>'search'),
 		);
+	}
+	
+	public function arrangeDomains($attr){
+		
+		if ($this->{$attr}){
+			$domains = array();
+			$arr = explode(',', $this->{$attr});
+			
+			foreach($arr as $domain){
+				$domain = trim($domain);
+				if (!preg_match('/^[a-z0-9\-\._]+\.[a-z]{2,4}$/', $domain)){
+					$this->addError($attr, 'One of the allowed domains is not correct: ' . $domain);
+					return false;
+				}
+				else
+					$domains[] = $domain;
+			}
+			$this->allowedDomains = $domains;
+			return true;
+		}
+		else{
+			$this->allowedDomains = array();
+			return true;
+		}
 	}
 	
 	public function isUniqueSubdomain($attr){
@@ -122,6 +149,14 @@ class Companies extends CMongo
 	}
 	
 			
-	
+	public function hints($key){
+		$hints =  array(
+			'allowedDomains' => 'If your company use more than one domain for emails (e.g. <i>domain.co, domain.org, etc</i>) specify them here <i>separated by commas</i>. <br /><b>Your email\'s domain added by default.</b>',
+			'subdomain' => 'After registration your subdomain will be created at once. <br />You can visit the page at <b>http://choosedsubdomain.' . Yii::app()->params['domain'] .'</b>',
+			'url'	=> 'Your company\'s website. <br />Started with http:// or https://',
+		);
+		return isset($hints[$key]) ? $hints[$key] : '';
+		
+	}
 	
 }

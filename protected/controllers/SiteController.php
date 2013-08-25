@@ -42,7 +42,11 @@ class SiteController extends Controller
 	public function beforeAction(){
 		Yii::app()->theme = 'holiday';
 		
-		Yii::app()->clientScript->registerCoreScript('jquery');
+		Yii::app()->clientScript->registerCoreScript('jquery')
+				->registerScriptFile( Yii::app()->theme->baseUrl .'/assets/jquery-ui-1.10.3.custom/js/jquery-ui-1.10.3.custom.min.js' )
+				->registerCssFile(Yii::app()->theme->baseUrl .'/assets/jquery-ui-1.10.3.custom/css/holiday/jquery-ui-1.10.3.custom.min.css' )
+				;
+		
 		return true;
 		
 		
@@ -96,12 +100,18 @@ class SiteController extends Controller
 			$validUser				= $user->validate();
 			$validCompany			= $company->validate();
 			if ( $validCompany && $validUser ){
+				$userDomain = preg_replace('/.+@/', '', $user->email );
+				
+				if (!in_array( $userDomain, $company->allowedDomains ))
+					$company->allowedDomains[] = $userDomain ;
+				
 				$company->save();
 				$password = $user->password;
 				$user->identifier = $company->_id;
 				$user->access_level = Users::$accessLevels;
 				$user->save();
 				$company->registeredBy = $user->_id;
+				
 				$company->save();
 				$this->redirect( '/successfullRegistration' . ( YII_DEBUG ? '?url=' . urlencode($this->_getValidationLink($user->_id, $company->_id, $company->subdomain))  : '' ));
                 
@@ -157,6 +167,14 @@ class SiteController extends Controller
 		if (YII_DEBUG)
 			echo urldecode ($_GET['url']);
 		
+		$mail = new YiiMailer();
+		//$mail->clearLayout();//if layout is already set in config
+		$mail->setFrom('no-reply@holiday-planner.com', 'Holiday Planner');
+		$mail->setTo(Yii::app()->params['adminEmail']);
+		$mail->setSubject('Mail subject');
+		$mail->setBody('Simple message');
+		$mail->send();		
+		
 		$this->render('viewSuccessfullRegistraion');
 	}
 	
@@ -164,6 +182,18 @@ class SiteController extends Controller
 	{
 		echo Yii::app()->user->getState('identifier');
 		$this->render('viewCompanyDetails');
+	}
+	
+	
+	public function actionEmailTest(){
+		if (YII_DEBUG){
+			$data = array(
+				'name' => 'NEV',
+				'message' => ' ez az uzenet',
+			);
+			$this->layout = 'mail';
+			$this->render('//mail/contact', $data);
+		}
 	}
 	
 	/**
