@@ -40,7 +40,7 @@ class UserIdentity extends CUserIdentity
 			$this->username = $user->firstName;
 			
 			foreach($user->attributes as $key => $value)
-				if ($key != 'password')
+				if ($key != 'password' && $key != 'accessLevel') // password and accesslevels mustnt store in cookies! see: components/WebUser.php
 					$this->setState($key, $value);
 			
 			//set last activity

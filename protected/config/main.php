@@ -38,8 +38,16 @@ return array(
 
 	// application components
 	'components'=>array(
+		'cache' => array(
+				'class'=>'CRedisCache',
+				'hostname'=>'localhost',
+				'port'=>6379,
+				'database'=>0,		
+				'hashKey' => false,
+		),
 		'user'=>array(
 			// enable cookie-based authentication
+			'class' => 'application.components.WebUser',
 			'allowAutoLogin'=>true,
 		),
 		// uncomment the following to enable URLs in path-format

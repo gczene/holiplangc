@@ -20,7 +20,7 @@ class DashboardController extends Controller
 			 ),
 			array(
 			 'application.filters.UserFilter',
-			 )
+			 ),
 			
 		);
 	}

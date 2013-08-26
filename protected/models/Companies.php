@@ -37,8 +37,8 @@ class Companies extends CMongo
 	
 	public function afterFind()
 	{
-		if (is_array( $this->allowedDomains))
-			$this->allowedDomains = implode(',', $this->allowedDomains);
+//		if (is_array( $this->allowedDomains))
+//			$this->allowedDomains = implode(',', $this->allowedDomains);
 	}
 	
 	public function rules()

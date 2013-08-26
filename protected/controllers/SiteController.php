@@ -71,13 +71,28 @@ class SiteController extends Controller
 			$user->attributes		= $_POST['Users'];
 			$user->identifier			= $this->company->_id;
 			if ( $user->validate() ){
-				$password = $user->password;
 				$user->identifier = $this->company->_id;
 				$user->accessLevel = array();
 				$user->save();
 				/*
-				 * mail to admins
+				 * confirm mail to user
 				 */
+				$data = array(
+					'link' => $this->_getValidationLink($user->_id, $this->company->_id, $this->company->subdomain),
+					'firstName' => $user->firstName,
+				);
+
+				$mail = new YiiMailer();
+				$mail->setView('confirm');
+				//$mail->clearLayout();//if layout is already set in config
+				$mail->setFrom('no-reply@' . Yii::app()->params['domain'], Yii::app()->name );
+				$mail->setData($data);
+				$mail->setTo( $user->email );
+				$mail->setSubject('Confirmation');
+				$mail->setBody('Simple message');
+				$mail->send();		
+				
+				
 				$this->redirect( '/successfullRegistration' . ( YII_DEBUG ? '?url=' . urlencode($this->_getValidationLink($user->_id, $this->company->_id, $this->company->subdomain))  : '' ));
                 
 			}
@@ -106,7 +121,6 @@ class SiteController extends Controller
 					$company->allowedDomains[] = $userDomain ;
 				
 				$company->save();
-				$password = $user->password;
 				$user->identifier = $company->_id;
 				$user->accessLevel = Users::$accessLevels;
 				$user->save();
@@ -124,7 +138,7 @@ class SiteController extends Controller
 				//$mail->clearLayout();//if layout is already set in config
 				$mail->setFrom('no-reply@' . Yii::app()->params['domain'], Yii::app()->name );
 				$mail->setData($data);
-				$mail->setTo(Yii::app()->params['adminEmail']);
+				$mail->setTo($user->email);
 				$mail->setSubject('Confirmation');
 				$mail->setBody('Simple message');
 				$mail->send();		
