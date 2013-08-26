@@ -106,6 +106,7 @@ class CMongo extends CModel
 					unset($class);
 				}
 			}
+			$this->afterFind();
 			return $out;
 		}
 		
@@ -130,6 +131,8 @@ class CMongo extends CModel
 					}
 				}
 				$this->_new = false;
+				$this->afterFind();
+				
 				return $this;
 			}
 		}
@@ -147,6 +150,8 @@ class CMongo extends CModel
 				}
 			}
 			$this->_new = false;			
+			$this->afterFind();
+			
 			return $this;
 		}
 		else{
@@ -177,6 +182,10 @@ class CMongo extends CModel
 
 	public function getIsNewRecord(){
 		return $this->_new;
+	}
+	
+	public function afterFind(){ // STUB
+		
 	}
 	
 

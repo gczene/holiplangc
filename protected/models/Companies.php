@@ -35,6 +35,12 @@ class Companies extends CMongo
 	}
 	
 	
+	public function afterFind()
+	{
+		if (is_array( $this->allowedDomains))
+			$this->allowedDomains = implode(',', $this->allowedDomains);
+	}
+	
 	public function rules()
 	{
 		return array(
@@ -113,12 +119,12 @@ class Companies extends CMongo
 
 			'elements'=>array(
 				'<fieldset ><legend class=""><i class="icol-pencil"></i>Register your company!</legend>',
-				'first_name'=>array(
+				'firstName'=>array(
 					'type'=>'text',
 					'maxlength'=>32,
 					'class' => 'text required',
 				),
-				'last_name'=>array(
+				'lastName'=>array(
 					'type'=>'text',
 					'maxlength'=>32,
 					'class' => 'text required',

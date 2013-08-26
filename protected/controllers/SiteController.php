@@ -73,7 +73,7 @@ class SiteController extends Controller
 			if ( $user->validate() ){
 				$password = $user->password;
 				$user->identifier = $this->company->_id;
-				$user->access_level = array();
+				$user->accessLevel = array();
 				$user->save();
 				/*
 				 * mail to admins
@@ -108,16 +108,36 @@ class SiteController extends Controller
 				$company->save();
 				$password = $user->password;
 				$user->identifier = $company->_id;
-				$user->access_level = Users::$accessLevels;
+				$user->accessLevel = Users::$accessLevels;
 				$user->save();
 				$company->registeredBy = $user->_id;
-				
 				$company->save();
+				
+				/* confirm mail to the user */
+				$data = array(
+					'link' => $this->_getValidationLink($user->_id, $company->_id, $company->subdomain),
+					'firstName' => $user->firstName,
+				);
+				
+				$mail = new YiiMailer();
+				$mail->setView('confirm');
+				//$mail->clearLayout();//if layout is already set in config
+				$mail->setFrom('no-reply@' . Yii::app()->params['domain'], Yii::app()->name );
+				$mail->setData($data);
+				$mail->setTo(Yii::app()->params['adminEmail']);
+				$mail->setSubject('Confirmation');
+				$mail->setBody('Simple message');
+				$mail->send();		
+				
+//				$this->layout = 'mail';
+//				$this->render('//mail/confirm', $data);
+				
 				$this->redirect( '/successfullRegistration' . ( YII_DEBUG ? '?url=' . urlencode($this->_getValidationLink($user->_id, $company->_id, $company->subdomain))  : '' ));
                 
 			}
 		}
-		
+			if (is_array($company->allowedDomains))
+				$company->allowedDomains = implode(',', $company->allowedDomains);
 			$this->render('viewRegister', array(
 				'company' => $company,
 				'user'	=> $user,
@@ -166,14 +186,6 @@ class SiteController extends Controller
 	{
 		if (YII_DEBUG)
 			echo urldecode ($_GET['url']);
-		
-		$mail = new YiiMailer();
-		//$mail->clearLayout();//if layout is already set in config
-		$mail->setFrom('no-reply@holiday-planner.com', 'Holiday Planner');
-		$mail->setTo(Yii::app()->params['adminEmail']);
-		$mail->setSubject('Mail subject');
-		$mail->setBody('Simple message');
-		$mail->send();		
 		
 		$this->render('viewSuccessfullRegistraion');
 	}

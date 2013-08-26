@@ -1,8 +1,8 @@
 <?php
 class Users extends CMongo
 {
-	public $first_name;
-	public $last_name;
+	public $firstName;
+	public $lastName;
 	public $email;
 	public $identifier;
 	public $password;
@@ -11,7 +11,7 @@ class Users extends CMongo
 	public  $salt;
 	public $last_activity;
 	public $status;
-	public $access_level;
+	public $accessLevel;
 	static $accessLevels = array(
 		'accountant',
 		'manager',
@@ -30,8 +30,8 @@ class Users extends CMongo
 	 */
 	public function attributeLabels() {
 		return array(
-			'first_name'	=> 'First Name',
-			'last_name'		=> 'Last Name',
+			'firstName'	=> 'First Name',
+			'lastName'		=> 'Last Name',
 			'email'		=> 'E-mail',
 			'password'		=> 'Password',
 			'password2'	=> 'Password again',
@@ -40,7 +40,7 @@ class Users extends CMongo
 			'salt'			=> 'Salt',
 			'last_activity'	=> 'Last activity',
 			'status'		=> 'Status',
-			'access_level'	=> 'Access Level',
+			'accessLevel'	=> 'Access Level',
 		);
 	}
 	
@@ -51,7 +51,7 @@ class Users extends CMongo
 	public function rules()
 	{
 		return array(
-			array('first_name, last_name, email', 'required'),
+			array('firstName, lastName, email', 'required'),
 			array('email', 'email'),
 			array('password', 'length', 'min' => 5, 'on' => 'register'),
 			array('password, password2', 'required', 'on' => 'register'),
@@ -60,7 +60,7 @@ class Users extends CMongo
 			array('last_activity, registered, status', 'numerical',  'integerOnly' => true),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('_id,first_name, last_name, company, email, password, registered, access_level', 'safe', 'on'=>'search'),
+			array('_id,firstName, lastName, company, email, password, registered, accessLevel', 'safe', 'on'=>'search'),
 		);
 	}
 	
@@ -102,12 +102,12 @@ class Users extends CMongo
 
 			'elements'=>array(
 				'<fieldset ><legend class=""><i class="icol-pencil"></i>Register here!</legend>',
-				'first_name'=>array(
+				'firstName'=>array(
 					'type'=>'text',
 					'maxlength'=>32,
 					'class' => 'text required',
 				),
-				'last_name'=>array(
+				'lastName'=>array(
 					'type'=>'text',
 					'maxlength'=>32,
 					'class' => 'text required',

@@ -5,7 +5,7 @@
 <table cellspacing="0" cellpadding="10" style="color:#666;font:13px Arial;line-height:1.4em;width:100%;">
 	<tbody>
 		<tr>
-            <td style="color:#4D90FE;font-size:22px;border-bottom: 2px solid #4D90FE;">
+            <td style="color:#e3a308;font-size:22px;border-bottom: 2px solid #323233;">
 				<?php echo CHtml::encode(Yii::app()->name); ?>
             </td>
 		</tr>
@@ -15,7 +15,7 @@
             </td>
 		</tr>
 		<tr>
-            <td>
+            <td style="color: #323233;">
 				<?php echo $content ?>
             </td>
 		</tr>

@@ -37,12 +37,11 @@ class UserIdentity extends CUserIdentity
 		else{
 			$this->errorCode=self::ERROR_NONE;
 			$this->_id = $user->_id;
-			$this->username = $user->first_name;
-			$this->setState('firstName', $user->first_name);
-			$this->setState('lastName', $user->last_name);
-			$this->setState('identifier', $user->identifier);
-			$this->setState('email', $user->email);
-			Yii::app()->session->add('accessLevel', $user->access_level );
+			$this->username = $user->firstName;
+			
+			foreach($user->attributes as $key => $value)
+				if ($key != 'password')
+					$this->setState($key, $value);
 			
 			//set last activity
 			$user->last_activity = time();

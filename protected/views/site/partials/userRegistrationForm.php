@@ -1,14 +1,14 @@
 		<fieldset>
 			<legend>Your details</legend>
 			<div class="row">
-				<?php echo CHtml::activeLabel($user, 'first_name') ?>
-				<?php echo CHtml::activeTextField($user, 'first_name', array('class' => 'text')) ?>
-				<?php echo CHtml::error($user, 'first_name') ?>
+				<?php echo CHtml::activeLabel($user, 'firstName') ?>
+				<?php echo CHtml::activeTextField($user, 'firstName', array('class' => 'text')) ?>
+				<?php echo CHtml::error($user, 'firstName') ?>
 			</div>
 			<div class="row">
-				<?php echo CHtml::activeLabel($user, 'last_name') ?>
-				<?php echo CHtml::activeTextField($user, 'last_name', array('class' => 'text')) ?>
-				<?php echo CHtml::error($user, 'last_name') ?>
+				<?php echo CHtml::activeLabel($user, 'lastName') ?>
+				<?php echo CHtml::activeTextField($user, 'lastName', array('class' => 'text')) ?>
+				<?php echo CHtml::error($user, 'lastName') ?>
 			</div>
 			<div class="row">
 				<?php echo CHtml::activeLabel($user, 'email') ?>
