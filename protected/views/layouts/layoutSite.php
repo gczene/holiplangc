@@ -19,7 +19,7 @@
 		
 		<div id="mainmenu">
 			<?php 
-			$this->widget('zii.widgets.CMenu',$this->menu);
+			$this->widget('application.widgets.menu.Menu',$this->menu);
 			?>
 <!--						<ul id="yw0">
 						<li class="active"><a href="/index.php/site/index">Home

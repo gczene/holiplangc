@@ -12,6 +12,7 @@ class Companies extends CMongo
 	public $subdomain;
 	public $maxUsers;
 	public $allowedDomains;
+	public $organigram;
 	
 	static $minUsers = 20;
 	
@@ -31,6 +32,7 @@ class Companies extends CMongo
 			'subdomain' => 'Subdomain',
 			'maxUsers' => 'Max Users',
 			'allowedDomains' => 'Allowed domains',
+			'organigram' => 'Organigram',
 		);
 	}
 	
@@ -52,7 +54,7 @@ class Companies extends CMongo
 			array('allowedDomains', 'arrangeDomains', 'on' => 'register'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('name, registeredBy, registered, allowedDomains', 'safe',  'on'=>'search'),
+			array('name, registeredBy, registered, allowedDomains, organigram', 'safe',  'on'=>'search'),
 		);
 	}
 	

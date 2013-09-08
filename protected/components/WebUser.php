@@ -7,14 +7,22 @@ class WebUser extends CWebUser
 	protected $_isManager;
 	protected $_isAccountant;
 	protected $_accessLevel;
-	
+	protected $_cacheKey;
+	public $TTL = 36000; // 10 hours
 	
 	
 	public function init(){
 		parent::init();
+		/* caching access level */
 		if ( ! $this->isGuest && COMPANY ){
-			$user = Users::model()->setCollection( $this->identifier . '.users' )->findByPk($this->id);
-			$this->_accessLevel = $user->accessLevel;
+			
+			$this->_cacheKey = ':accessLvl:' . $this->id;
+			
+			if (! $this->_accessLevel = Yii::app()->cache->get($this->_cacheKey )){
+				$user = Users::model()->setCollection( $this->identifier . '.users' )->findByPk($this->id);
+				Yii::app()->cache->set($this->_cacheKey, $user->accessLevel, $this->TTL);
+				$this->_accessLevel = $user->accessLevel;
+			}
 		}
 	}
 	
@@ -57,7 +65,7 @@ class WebUser extends CWebUser
 	 * is the user accountant ?
 	 * @return boolean
 	 */
-	public function getAccountant()
+	public function getIsAccountant()
 	{
 		if ($this->_isAccountant ===  NULL)
 			$this->_isAccountant = (is_array($this->_accessLevel) && in_array('accountant', $this->_accessLevel ) );
