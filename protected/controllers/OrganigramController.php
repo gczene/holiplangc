@@ -8,7 +8,12 @@ class OrganigramController extends Controller
 	
 	public function actionIndex()
 	{
-		$this->render('index');
+		Yii::app()->clientScript->registerScript('org', 'var organogram = ' . json_encode($this->company->organigram) .' ;', CClientScript::POS_HEAD)
+				->registerScript('compName', 'var compName = "' . $this->company->name . '";', CClientScript::POS_HEAD);
+		
+		$this->render('index', array(
+			'company' => $this->company,
+		));
 	}
 
 	
@@ -22,6 +27,20 @@ class OrganigramController extends Controller
 			 ),
 			
 		);
+	}
+	
+	
+	public function beforeAction(){
+		Yii::app()->theme = 'holiday';
+		Yii::app()->clientScript->registerScriptFile( Yii::app()->theme->baseUrl .'/assets/js/jquery.orgchart.min.js' )
+				->registerScriptFile( Yii::app()->theme->baseUrl .'/assets/js/organigram.js' )
+				->registerCssFile(Yii::app()->theme->baseUrl . '/assets/css/organogram.css')
+				;
+
+		
+		return true;
+		
+		
 	}
 	
 	// Uncomment the following methods and override them if needed

@@ -42,11 +42,6 @@ class SiteController extends Controller
 	public function beforeAction(){
 		Yii::app()->theme = 'holiday';
 		
-		Yii::app()->clientScript->registerCoreScript('jquery')
-				->registerScriptFile( Yii::app()->theme->baseUrl .'/assets/jquery-ui-1.10.3.custom/js/jquery-ui-1.10.3.custom.min.js' )
-				->registerCssFile(Yii::app()->theme->baseUrl .'/assets/jquery-ui-1.10.3.custom/css/holiday/jquery-ui-1.10.3.custom.min.css' )
-				;
-		
 		return true;
 		
 		

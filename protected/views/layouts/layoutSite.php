@@ -2,7 +2,13 @@
 <html>
 <head>
 	<link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/holiday.css" media="screen, projection" />
-	
+<?php 
+		Yii::app()->clientScript->registerCoreScript('jquery')
+				->registerScriptFile( Yii::app()->theme->baseUrl .'/assets/jquery-ui-1.10.3.custom/js/jquery-ui-1.10.3.custom.min.js' )
+				->registerCssFile(Yii::app()->theme->baseUrl .'/assets/jquery-ui-1.10.3.custom/css/holiday/jquery-ui-1.10.3.custom.min.css' )
+				;
+
+?>	
 <title>Title of the document</title>
 </head>
 
@@ -21,27 +27,18 @@
 			<?php 
 			$this->widget('application.widgets.menu.Menu',$this->menu);
 			?>
-<!--						<ul id="yw0">
-						<li class="active"><a href="/index.php/site/index">Home
-								<div class="menuBG"></div>
-								
-							</a></li>
-						<li><a href="/index.php/site/page?view=about">About
-								<div class="menuBG"></div>
-							
-							</a></li>
-						<li><a href="/index.php/site/contact">Contact
-								<div class="menuBG"></div>
-							</a></li>
-						<li><a href="/index.php/site/login">Login
-								<div class="menuBG"></div>
-							</a></li>
-						</ul>-->
 		</div><!-- mainmenu -->
 		
 		<div class="pt-24 pb-24">
-			<div class="positionCenter container">
-				<?php echo $content; ?>
+			<div class="container">
+				<div class="innerH">
+					<?php echo $content; ?>
+				</div>
+			</div>
+		</div>
+		<div class="footer">
+			<div class="innterH">
+				Footer
 			</div>
 		</div>
 	</div>
