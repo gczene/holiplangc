@@ -33,8 +33,10 @@ class OrganigramController extends Controller
 	public function beforeAction(){
 		Yii::app()->theme = 'holiday';
 		Yii::app()->clientScript->registerScriptFile( Yii::app()->theme->baseUrl .'/assets/js/jquery.orgchart.min.js' )
+				->registerScriptFile( Yii::app()->theme->baseUrl .'/assets/colorbox/jquery.colorbox-min.js' )
 				->registerScriptFile( Yii::app()->theme->baseUrl .'/assets/js/organigram.js' )
 				->registerCssFile(Yii::app()->theme->baseUrl . '/assets/css/organogram.css')
+				->registerCssFile(Yii::app()->theme->baseUrl . '/assets/colorbox/colorbox.css')
 				;
 
 		
@@ -43,6 +45,12 @@ class OrganigramController extends Controller
 		
 	}
 	
+	public function actionGetForm()
+	{
+		$this->renderPartial('partials/viewGetForm');
+	}
+
+
 	// Uncomment the following methods and override them if needed
 	/*
 	public function filters()

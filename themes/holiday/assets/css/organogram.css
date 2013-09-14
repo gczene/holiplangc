@@ -1,16 +1,17 @@
 div.orgChart {
-    border                : 1px solid #cccccc;
-    background-color      : #ffffe8;
+/*    border                : 1px solid #cccccc;
+    background-color      : #ffffe8;*/
     margin                : 10px;
     padding               : 20px;
 }
 
 div.orgChart h2 {
     margin                : 0px;
-    font-size             : 1em;
-    border-bottom         : 2px solid black;
-    border-bottom         : none;
+    font-size             : 10px;
+    /*border-bottom         : 0px solid #fff;*/
+    /*border-bottom         : none;*/
 }
+div.orgChart h2 span {font-size: 12px;}
 
 div.orgChart ul {
     list-style            : none;
@@ -35,15 +36,15 @@ div.orgChart tr.lines td.line {
 }
 
 div.orgChart tr.lines td.top {
-    border-top            : 3px solid black;
+    border-top            : 1px solid #999;
 }
 
 div.orgChart tr.lines td.left {
-    border-right          : 2px solid black;
+    border-right          : 1px solid #999;
 }
 
 div.orgChart tr.lines td.right {
-    border-left           : 2px solid black;
+    border-left           : 1px solid #999;
 }
 
 div.orgChart td {
@@ -54,23 +55,24 @@ div.orgChart td {
 
 div.orgChart div.node {
     cursor                : default;
-    border                : 2px solid black;
+    border                : 1px solid #999;
     display               : inline-block;
     padding               : 0 4px;
     width                 : 96px;
     height                : 60px;
-    background-color      : #ffffcf;
+    background-color      : #dadada;
     line-height           : 1.3em;
-    border-radius         : 8px;
-    box-shadow            : 4px 4px 6px #888888;
-    -moz-border-radius    : 8px;
-    -moz-box-shadow       : 4px 4px 6px #888888;
-    -webkit-border-radius : 8px;
-    -webkit-box-shadow    : 4px 4px 6px #888888;
+    border-radius         : 4px;
+    /*box-shadow            : 1px 1px 1px #888888;*/
+    -moz-border-radius    : 4px;
+    /*-moz-box-shadow       : 4px 4px 6px #888888;*/
+    -webkit-border-radius : 4px;
+    /*-webkit-box-shadow    : 1px 1px 6px #efefef;*/
+	position: relative;
 }
 
 div.orgChart div.hasChildren {
-    background-color      : #ffff98;
+    /*background-color      : #ffff98;*/
 }
 
 div.orgChart.interactive div.hasChildren {
@@ -80,3 +82,14 @@ div.orgChart.interactive div.hasChildren {
 div.orgChart div.node.hover {
     background-color      : white;
 }
+
+div.orgChart div.node.level0 {
+    background-color: #fff;
+}
+div.orgChart div.node.level1 {
+    background-color: #f7c808;
+}
+div.orgChart div.node.level2 {
+    background-color: #e98813;
+}
+div.orgChart a.edit {position: absolute; display: block;  bottom: 0px; right: 0px;}

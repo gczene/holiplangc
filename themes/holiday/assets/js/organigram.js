@@ -14,7 +14,9 @@ function org(org, compName){
 			this.html = this.createList();
 			$('#chart-source li').append(this.html )
 			.orgChart({container: $('#chart-container')});
-			
+			$(' a.editt').live('click', function(){
+				alert($(this).attr('id'))
+			})
 		}
 	}
 	
@@ -28,7 +30,8 @@ function org(org, compName){
 		
 		var html = '<UL>';
 		for(var id in item){
-			html += '<li id="' + id + '">' + item[id].label;
+			html += '<li ><span>' + item[id].label + '</span>'
+				+ '<a class="edit" onclick="editOrg(\'' + id + '\');" id="' + id + '">Edit</a>';
 			if (typeof item[id].departments == 'object' && item[id].departments.length != 0){
 				html += this.createList(item[id].departments);
 			}
@@ -38,6 +41,10 @@ function org(org, compName){
 		return html;
 	}
 	
+}
+
+function editOrg(id){
+	$.colorbox({href: '/organigram/getForm/id/' + id});
 }
 
 $(document).ready(function(){

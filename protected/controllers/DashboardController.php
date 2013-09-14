@@ -12,6 +12,10 @@ class DashboardController extends Controller
 		
 		$this->render('index');
 	}
+	public function beforeAction(){
+		Yii::app()->theme = 'holiday';
+		return true;
+	}
 
 	public function filters(){
 		return array(
