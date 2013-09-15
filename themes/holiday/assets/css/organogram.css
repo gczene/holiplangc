@@ -93,3 +93,16 @@ div.orgChart div.node.level2 {
     background-color: #e98813;
 }
 div.orgChart a.edit {position: absolute; display: block;  bottom: 0px; right: 0px;}
+
+/* colorboxPartial form  */
+
+#colorboxPartial { width: 480px;}
+/*
+@media all and (max-width: 480px){
+	#colorboxPartial {color: red; width: 200px;}
+}
+@media all and (min-width:481){
+	#colorboxPartial {color: green; width: 480px;}
+}*/
+
+/* END colorboxPartial form  */

@@ -47,7 +47,11 @@ class OrganigramController extends Controller
 	
 	public function actionGetForm()
 	{
-		$this->renderPartial('partials/viewGetForm');
+		$department = Companies::getOneDepartment($this->company, $_GET['id']);
+		$this->renderPartial('partials/viewGetForm', array(
+			'parentId' => $_GET['id'],
+			'department' => $department,
+		));
 	}
 
 

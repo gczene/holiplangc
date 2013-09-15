@@ -167,4 +167,42 @@ class Companies extends CMongo
 		
 	}
 	
+	/*
+	 * get a department details by id
+	 * @param $comany Companies obj
+	 * @param $id string
+	 * @return array
+	 */
+	public static function getOneDepartment($company, $id, $withDepartments = false){
+		$out = array();
+		
+		if ($id == '0'){
+			$out['label'] = $company->name;
+			$out['id'] = $id;
+			if ($withDepartments)
+				$out['departments']= $company->organigram;
+		}
+		else{
+			$out = self::searchRecursive($company->organigram, $id, $withDepartments);
+			
+		}
+		return $out;
+	}
+	
+	public static function searchRecursive($organigram, $id, $withDepartments = false){
+		$match = array();
+		foreach($organigram as $key => $data){
+			if ($key == $id){
+				if (!$withDepartments)
+					unset($data['departments']);
+				$match = $data;
+				break;
+			}
+			else{
+				$match = self::searchRecursive( $data['departments'], $id, $withDepartments);
+			}
+		}
+		return $match;
+	}
+	
 }

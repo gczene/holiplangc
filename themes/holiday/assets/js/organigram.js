@@ -14,9 +14,6 @@ function org(org, compName){
 			this.html = this.createList();
 			$('#chart-source li').append(this.html )
 			.orgChart({container: $('#chart-container')});
-			$(' a.editt').live('click', function(){
-				alert($(this).attr('id'))
-			})
 		}
 	}
 	
@@ -50,5 +47,9 @@ function editOrg(id){
 $(document).ready(function(){
 		var o = new org(organogram, compName);
 		o.run();
+		$(window).resize(function(){
+//			if ($("#colorbox").css("display")=="block") {  
+//			} 
+		})
 })
 

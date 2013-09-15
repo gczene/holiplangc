@@ -2,7 +2,7 @@
 
 <div class="content sideBar">
 		<div >
-			right
+			right<br />
 				
 		</div>
 		<div >
