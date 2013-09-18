@@ -21,8 +21,12 @@
 		$('#colorboxPartial .submit').click(function(){
 			var $n = $('#Department_new').val();
 //			alert($n.lenth + ' ' + ($n.replace(/ /g, '') != '') )
-			if ( $n.replace(/ /g, '') != '' && $n.length ==1 ){
+			if ( $n.replace(/ /g, '') != '' && $n.replace(/ /g, '').length ==1 ){
 				$('#Department_new').closest('.row').children('.errorMessage').show()
+			}
+			else{
+				$('#Department_new').closest('.row').children('.errorMessage').hide()
+				
 			}
 			
 			$.colorbox.resize();
