@@ -171,6 +171,7 @@ class Companies extends CMongo
 	 * get a department details by id
 	 * @param $comany Companies obj
 	 * @param $id string
+	 * @param $withDepartments boolean , wheter with children
 	 * @return array
 	 */
 	public static function getOneDepartment($company, $id, $withDepartments = false){
@@ -203,6 +204,60 @@ class Companies extends CMongo
 			}
 		}
 		return $match;
+	}
+	
+	
+	public function updateDepartment(Departments $department)
+	{
+		
+		$this->organigram = self::_updateDepartment($this->organigram, $department);
+		$this->save();
+	}
+	
+	public static function _updateDepartment(&$array, $data){
+		if (is_array($array) && count($array))
+		{
+//			$out = array();
+			foreach($array as $id => &$dep)
+			{
+				
+				if ($id == $data->_id){
+					$dep['label'] = $data->label;
+				}
+//				$out[$id] = $dep;
+				
+				if (is_array($dep['departments']) && count($dep['departments'])){
+//					$out = array_merge( $out, self::norm($dep['departments'], $data));
+					self::_updateDepartment($dep['departments'], $data);
+				}
+				
+				
+			}
+			return $array;
+		}
+		else{
+			return false;
+		}
+	}
+	
+	public function fullRecursive($organigram)
+	{
+		if (is_array($organigram) && count($organigram) > 0 ){
+			$array = array();
+			foreach($this->organigram as $id => $dep)
+			{
+				$array[$id] = $dep;
+				unset($array[$id]['departments']);
+				if (count($dep['departments'])){
+					echo gettype($this->fullRecursive($dep['departments']));
+					print_r($dep['departments']);
+				}
+			}
+			return $array;
+		}
+		else
+			return false;
+		
 	}
 	
 }

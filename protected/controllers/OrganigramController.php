@@ -49,12 +49,29 @@ class OrganigramController extends Controller
 	{
 		$department = Companies::getOneDepartment($this->company, $_GET['id']);
 		$this->renderPartial('partials/viewGetForm', array(
-			'parentId' => $_GET['id'],
+			'id' => $_GET['id'],
 			'department' => $department,
 		));
 	}
 
 
+	
+	public function actionAddDepartment(){
+		if (isset($_POST['Department']) && YII::app()->request->isAjaxRequest){
+			
+			$department = new Departments; // for validate
+			$department->attributes = $_POST['Department'];
+			if ($department->validate())
+			{
+				$this->company->updateDepartment($department);
+			}
+//			die();
+			print_r($department->attributes);
+			
+			print_r($department->errors);
+//			$this->company->updateDepartment()
+		}
+	}
 	// Uncomment the following methods and override them if needed
 	/*
 	public function filters()

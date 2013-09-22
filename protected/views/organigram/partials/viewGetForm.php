@@ -1,6 +1,5 @@
 <div id="colorboxPartial">
 	<form class="form">
-		<input id="parent" type="hidden" value="<?php echo $parentId; ?>" />
 		<div class="row">
 			<label for="Department_label">Department's name</label>
 			<input class="text" value="<?php echo $department['label'] ?>" type="text" id="Department_label" name="Department[label]"  />
@@ -13,19 +12,25 @@
 		<div class='row'>
 			<input type='button' class='submit' value='Save' />
 		</div>
+		<input type="hidden" name="Department[_id]" value="<?php echo $id; ?>" />
 	</form>
 </div>
 <script>
 	$(function(){
 		$('#colorboxPartial .errorMessage').hide();
 		$('#colorboxPartial .submit').click(function(){
+			var $this = $(this);
 			var $n = $('#Department_new').val();
-//			alert($n.lenth + ' ' + ($n.replace(/ /g, '') != '') )
+			
 			if ( $n.replace(/ /g, '') != '' && $n.replace(/ /g, '').length ==1 ){
-				$('#Department_new').closest('.row').children('.errorMessage').show()
+				$('#Department_new').closest('.row').children('.errorMessage').show();
 			}
 			else{
-				$('#Department_new').closest('.row').children('.errorMessage').hide()
+				$('#Department_new').closest('.row').children('.errorMessage').hide();
+				var data = $this.closest('form').serialize();
+				$.post('/organigram/addDepartment', data , function(data){
+					console.log(data);
+				})
 				
 			}
 			
