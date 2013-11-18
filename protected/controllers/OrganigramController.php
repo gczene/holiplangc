@@ -64,6 +64,9 @@ class OrganigramController extends Controller
 			if ($department->validate())
 			{
 				$this->company->updateDepartment($department);
+				if (trim($_POST['Department']['new'])){
+					$this->company->addDepartment($department, $_POST['Department']['new']);
+				}
 			}
 //			die();
 			print_r($department->attributes);

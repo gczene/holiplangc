@@ -214,32 +214,44 @@ class Companies extends CMongo
 		$this->save();
 	}
 	
-	public static function _updateDepartment(&$array, $data){
-		if (is_array($array) && count($array))
+	public static function _updateDepartment(&$originalData, $newData){
+		if (is_array($originalData) && count($originalData))
 		{
 //			$out = array();
-			foreach($array as $id => &$dep)
+			foreach($originalData as $id => &$dep)
 			{
 				
-				if ($id == $data->_id){
-					$dep['label'] = $data->label;
+				if ($id == $newData->_id){
+					$dep['label'] = $newData->label;
 				}
 //				$out[$id] = $dep;
 				
 				if (is_array($dep['departments']) && count($dep['departments'])){
-//					$out = array_merge( $out, self::norm($dep['departments'], $data));
-					self::_updateDepartment($dep['departments'], $data);
+//					$out = array_merge( $out, self::norm($dep['departments'], $newData));
+					self::_updateDepartment($dep['departments'], $newData);
 				}
 				
 				
 			}
-			return $array;
+			return $originalData;
 		}
 		else{
 			return false;
 		}
 	}
 	
+	/*
+	 * add new sub department
+	 * @params	insance of Departments	$department
+	 * @param	string				$label 
+	 * @return		bool
+	 */
+	public function addDepartment(Departments $department, $label)
+	{
+		if (is_string($label) && trim($label) != '' ){
+			print_r($this->organigram);
+		}
+	}
 	public function fullRecursive($organigram)
 	{
 		if (is_array($organigram) && count($organigram) > 0 ){

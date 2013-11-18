@@ -67,7 +67,7 @@ return array(
 //				'<controller:dashboard>/<action:\w+>'=>'<controller>/<action>',
 //				'<action:\w+>' => 'site/<action>',
 //				'<action:\w+>/<userId:[\d\w]+>/<companyId:[\d\w]+>' => 'site/<action>',
-//				'<action:userValidation>/<userId:[\d\w\.\-~]+>/<companyId:[\d\w\.\-~]+>' => 'site/<action>',
+				'<controller:\w+>/<action:userValidation>/<userId:[\d\w\.\-~]+>/<companyId:[\d\w\.\-~]+>' => 'site/<action>',
 			),
 		),
 		

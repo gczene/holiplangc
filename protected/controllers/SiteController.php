@@ -141,7 +141,7 @@ class SiteController extends Controller
 //				$this->layout = 'mail';
 //				$this->render('//mail/confirm', $data);
 				
-				$this->redirect( '/successfullRegistration' . ( YII_DEBUG ? '?url=' . urlencode($this->_getValidationLink($user->_id, $company->_id, $company->subdomain))  : '' ));
+				$this->redirect( '/site/successfullRegistration' . ( YII_DEBUG ? '?url=' . urlencode($this->_getValidationLink($user->_id, $company->_id, $company->subdomain))  : '' ));
                 
 			}
 		}
@@ -161,7 +161,7 @@ class SiteController extends Controller
 	 */
 	private function _getValidationLink($userId, $companyId, $subdomain)
 	{
-		return 'http://' . $subdomain . '.' . Yii::app()->params['domain'] . '/userValidation/' . Yii::app()->encrypt->encode( $userId ) . '/' . Yii::app()->encrypt->encode($companyId);
+		return 'http://' . $subdomain . '.' . Yii::app()->params['domain'] . '/site/userValidation/' . Yii::app()->encrypt->encode( $userId ) . '/' . Yii::app()->encrypt->encode($companyId);
 	}
 	
 	
